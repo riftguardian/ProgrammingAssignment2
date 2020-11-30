@@ -1,15 +1,34 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 
-## Write a short comment describing this function
+## Modified makeVector function for Coursera assignment
+## Allows Creation of makeCacheMatrix object with various 'methods'
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(mat = matrix()) {
+  inv <- NULL
+  set <- function(y) {
+    mat <<- y
+    inv <<- NULL
+  }
+  get <- function() mat
+  setInverse <- function(solved) inv <<- solved
+  getInverse <- function() inv
+  list(set = set, get = get,
+       setInverse = setInverse,
+       getInverse = getInverse)
 }
 
+## Checks if inverse exists, if it does, it returns the inverse.
+## If inverse doesn't exist, it uses the object's methods to set one
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(mat, ...) {
+  inv <- mat$getInverse()
+  if(!is.null(inv)) {
+    message("getting cached data")
+    return(inv)
+  }
+  data <- mat$get()
+  inv <- solve(data, ...)
+  mat$setInverse(inv)
+  inv
 }
